@@ -157,8 +157,7 @@ class pm_platron extends PaymentRoot
 		$arrReq['pg_language'] = $language;
 		$arrReq['pg_testing_mode'] = $pmconfigs['test_mode']?1:0;
 
-		else
-			$arrReq['pg_currency'] = $order->currency_code_iso;
+		$arrReq['pg_currency'] = $order->currency_code_iso;
 		
 		$arrReq['pg_salt'] = rand(21,43433);
 		$arrReq['cms_payment_module'] = 'JOOMSHOPING';
