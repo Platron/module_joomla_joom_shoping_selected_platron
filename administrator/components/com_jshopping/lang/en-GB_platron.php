@@ -1,6 +1,9 @@
 <?php
 // Platron
 define('_JSHOP_PLATRON_TEST_MODE_DESCRIPTION','For testing mode ');
+
+define('_JSHOP_PLATRON_TRANSACTION_CREATE_OFD_CHECK','Create check');
+
 define('_JSHOP_PLATRON_MERCHANT_ID','Merchant id in platron ');
 define('_JSHOP_PLATRON_MERCHANT_ID_DESCRIPTION','Get it on https://www.platron.ru/admin/merchants.php');
 define('_JSHOP_PLATRON_SECRET_KEY','Secret word');

@@ -10,4 +10,6 @@ define('_JSHOP_PLATRON_LIFETIME_DESCRIPTION','В часах. Максималь�
 define('_JSHOP_PLATRON_TRANSACTION_END_DESCRIPTION','Выберите статус заказа, который будет установлен, если PLATRON транзакция прошла успешно. ');
 define('_JSHOP_PLATRON_TRANSACTION_PENDING_DESCRIPTION','Выберите статус заказа, который будет установлен, если PLATRON транзакция незавершена. ');
 define('_JSHOP_PLATRON_TRANSACTION_FAILED_DESCRIPTION','Выберите статус заказа, который будет установлен, если PLATRON транзакция прошла неуспешно. ');
+define('_JSHOP_PLATRON_TRANSACTION_CREATE_OFD_CHECK','Создание чека');
+
 ?>
