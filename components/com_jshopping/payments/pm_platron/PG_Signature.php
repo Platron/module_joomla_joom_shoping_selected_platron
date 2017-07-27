@@ -1,6 +1,5 @@
 <?php
 class PG_Signature {
-
 	/**
 	 * Get script name from URL (for use as parameter in self::make, self::check, etc.)
 	 *
@@ -26,7 +25,6 @@ class PG_Signature {
 	{
 		return self::getScriptNameFromUrl( $_SERVER['PHP_SELF'] );
 	}
-
 	/**
 	 * Creates a signature
 	 *
@@ -36,10 +34,10 @@ class PG_Signature {
 	 */
 	public static function make ( $strScriptName, $arrParams, $strSecretKey )
 	{
-		$arrFlatParams = self::makeFlatParamsArray($arrParams);
-		return md5( self::makeSigStr($strScriptName, $arrFlatParams, $strSecretKey) );
+		//$arrFlatParams = self::makeFlatParamsArray($arrParams);
+		//return md5( self::makeSigStr($strScriptName, $arrFlatParams, $strSecretKey) );
+		return md5(self::makeSigStr($strScriptName, $arrParams, $strSecretKey));
 	}
-
 	/**
 	 * Verifies the signature
 	 *
@@ -52,8 +50,6 @@ class PG_Signature {
 	{
 		return (string)$signature === self::make($strScriptName, $arrParams, $strSecretKey);
 	}
-
-
 	/**
 	 * Returns a string, a hash of which coincide with the result of the make() method.
 	 * WARNING: This method can be used only for debugging purposes!
@@ -65,17 +61,30 @@ class PG_Signature {
 	static function debug_only_SigStr ( $strScriptName, $arrParams, $strSecretKey ) {
 		return self::makeSigStr($strScriptName, $arrParams, $strSecretKey);
 	}
-
-
-	private static function makeSigStr ( $strScriptName, array $arrParams, $strSecretKey ) {
+	private static function makeSigStr ( $strScriptName, $arrParams, $strSecretKey ) 
+	{
 		unset($arrParams['pg_sig']);
 		
 		ksort($arrParams);
-
 		array_unshift($arrParams, $strScriptName);
 		array_push   ($arrParams, $strSecretKey);
-
-		return join(';', $arrParams);
+		return self::arJoin($arrParams);
+	}
+	private static function arJoin ($in) {
+		return rtrim(self::arJoinProcess($in, ''), ';');
+	}
+	private static function arJoinProcess ($in, $str) 
+	{
+		if (is_array($in)) {
+			ksort($in);
+			$s = '';
+			foreach($in as $v) {
+				$s .= self::arJoinProcess($v, $str);
+			}
+			return $s;
+		} else {
+			return $str . $in . ';';
+		}
 	}
 	
 	private static function makeFlatParamsArray ( $arrParams, $parent_name = '' )
@@ -93,20 +102,15 @@ class PG_Signature {
 			 * Чтобы можно было потом нормально отсортировать и вложенные узлы не запутались при сортировке
 			 */
 			$name = $parent_name . $key . sprintf('%03d', $i);
-
 			if (is_array($val) ) {
 				$arrFlatParams = array_merge($arrFlatParams, self::makeFlatParamsArray($val, $name));
 				continue;
 			}
-
 			$arrFlatParams += array($name => (string)$val);
 		}
-
 		return $arrFlatParams;
 	}
-
 	/********************** singing XML ***********************/
-
 	/**
 	 * make the signature for XML
 	 *
@@ -119,7 +123,6 @@ class PG_Signature {
 		$arrFlatParams = self::makeFlatParamsXML($xml);
 		return self::make($strScriptName, $arrFlatParams, $strSecretKey);
 	}
-
 	/**
 	 * Verifies the signature of XML
 	 *
@@ -135,7 +138,6 @@ class PG_Signature {
 		$arrFlatParams = self::makeFlatParamsXML($xml);
 		return self::check((string)$xml->pg_sig, $strScriptName, $arrFlatParams, $strSecretKey);
 	}
-
 	/**
 	 * Returns a string, a hash of which coincide with the result of the makeXML() method.
 	 * WARNING: This method can be used only for debugging purposes!
@@ -149,7 +151,6 @@ class PG_Signature {
 		$arrFlatParams = self::makeFlatParamsXML($xml);
 		return self::makeSigStr($strScriptName, $arrFlatParams, $strSecretKey);
 	}
-
 	/**
 	 * Returns flat array of XML params
 	 *
@@ -161,7 +162,6 @@ class PG_Signature {
 		if ( ! $xml instanceof SimpleXMLElement ) {
 			$xml = new SimpleXMLElement($xml);
 		}
-
 		$arrParams = array();
 		$i = 0;
 		foreach ( $xml->children() as $tag ) {
@@ -175,15 +175,12 @@ class PG_Signature {
 			 * Чтобы можно было потом нормально отсортировать и вложенные узлы не запутались при сортировке
 			 */
 			$name = $parent_name . $tag->getName().sprintf('%03d', $i);
-
 			if ( $tag->children()->count() > 0 ) {
 				$arrParams = array_merge($arrParams, self::makeFlatParamsXML($tag, $name));
 				continue;
 			}
-
 			$arrParams += array($name => (string)$tag);
 		}
-
 		return $arrParams;
 	}
 }

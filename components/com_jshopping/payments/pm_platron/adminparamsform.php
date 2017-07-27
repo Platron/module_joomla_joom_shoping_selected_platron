@@ -72,6 +72,17 @@
 		?>
 		</td>
 	</tr>
+	<tr>
+		<td style="width:250px;" class="key">
+		<?php echo _JSHOP_PLATRON_TRANSACTION_CREATE_OFD_CHECK;?>
+		</td>
+		<td>
+		<?php              
+		print JHTML::_('select.booleanlist', 'pm_params[create_ofd_check]', 'class = "inputbox" size = "1"', $params['create_ofd_check']);
+		echo " ".JHTML::tooltip(_JSHOP_PLATRON_TRANSACTION_CREATE_OFD_CHECK);
+		?>
+		</td>
+	</tr>
 </table>
 </fieldset>   
 <div class="clr"></div>
