@@ -127,7 +127,6 @@ class pm_platron extends PaymentRoot
 		$arrReq['pg_order_id']    = $order->order_id;		// Идентификатор заказа в системе магазина
 		$arrReq['pg_amount']      = sprintf("%01.2f",$out_summ);		// Сумма заказа
 		$arrReq['pg_description'] = "Оплата заказа ".$_SERVER['HTTP_HOST']; // Описание заказа (показывается в Платёжной системе)
-		$arrReq['pg_user_ip'] = $_SERVER['REMOTE_ADDR']; // Описание заказа (показывается в Платёжной системе)
 		$arrReq['pg_site_url'] = $_SERVER['HTTP_HOST']; // Для возврата на сайт
 		$arrReq['pg_lifetime'] = $pmconfigs['lifetime']*60*60; // Время жизни в секундах
 		
